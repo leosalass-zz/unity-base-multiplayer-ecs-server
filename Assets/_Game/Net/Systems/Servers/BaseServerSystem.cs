@@ -104,12 +104,15 @@ struct ServerUpdateJob : IJobParallelForDefer
 
         NetworkEvent.Type cmd;
         while ((cmd = driver.PopEventForConnection(connections[index], out stream)) != NetworkEvent.Type.Empty)
-        {
-            if (cmd == NetworkEvent.Type.Disconnect)
+
+            if (cmd == NetworkEvent.Type.Data)
+            {
+            }
+            else if (cmd == NetworkEvent.Type.Disconnect)
             {
                 Debug.Log("Client disconnected from server");
                 connections[index] = default(NetworkConnection);
             }
-        }
     }
+}
 }
