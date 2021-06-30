@@ -107,6 +107,11 @@ struct ServerUpdateJob : IJobParallelForDefer
 
             if (cmd == NetworkEvent.Type.Data)
             {
+                byte messageCode = stream.ReadByte();
+                FixedString128 chatMessage = stream.ReadFixedString128();
+
+                Debug.Log("Got " + messageCode + " as message code.");
+                Debug.Log("message: " + chatMessage);
             }
             else if (cmd == NetworkEvent.Type.Disconnect)
             {
@@ -114,5 +119,4 @@ struct ServerUpdateJob : IJobParallelForDefer
                 connections[index] = default(NetworkConnection);
             }
     }
-}
 }
