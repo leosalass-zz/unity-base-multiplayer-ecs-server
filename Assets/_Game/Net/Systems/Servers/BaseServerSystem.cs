@@ -16,11 +16,11 @@ public class BaseServerSystem : SystemBase
 
     protected override void OnCreate()
     {
-        int connectionsLimit = 16;
+        int connectionsLimit = 32;
         m_Connections = new NativeList<NetworkConnection>(connectionsLimit, Allocator.Persistent);
         m_Driver = NetworkDriver.Create();
         NetworkEndPoint endpoint = NetworkEndPoint.AnyIpv4;
-        endpoint.Port = 9000;
+        endpoint.Port = 5522;
         if (m_Driver.Bind(endpoint) != 0)
             Debug.Log("Failed to bind to port 9000");
         else
@@ -81,7 +81,7 @@ struct ServerUpdateConnectionsJob : IJob
         while ((c = driver.Accept()) != default(NetworkConnection))
         {
             connections.Add(c);
-            Debug.Log("Accepted a connection");
+            Debug.LogWarning("Accepted a connection");
         }
     }
 }
@@ -110,12 +110,12 @@ struct ServerUpdateJob : IJobParallelForDefer
                 byte messageCode = stream.ReadByte();
                 FixedString128 chatMessage = stream.ReadFixedString128();
 
-                Debug.Log("Got " + messageCode + " as message code.");
+                //Debug.Log("Got " + messageCode + " as message code.");
                 Debug.Log("message: " + chatMessage);
             }
             else if (cmd == NetworkEvent.Type.Disconnect)
             {
-                Debug.Log("Client disconnected from server");
+                Debug.LogError("Client disconnected from server");
                 connections[index] = default(NetworkConnection);
             }
     }
