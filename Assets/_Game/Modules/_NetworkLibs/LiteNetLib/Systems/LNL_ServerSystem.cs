@@ -9,9 +9,11 @@ using Unity.Mathematics;
 
 public class LNL_ServerSystem : SystemBase, INetEventListener, INetLogger
 {
-    private NetManager _netServer;
+    private NetManager _netManager;
     private NetPeer _ourPeer;
     private NetDataWriter _dataWriter;
+
+    private PlayerCharacterEntitySpawner _entitySpawner;
 
 #if UNITY_EDITOR
     protected override void OnCreate() { Init(); }
@@ -25,28 +27,33 @@ public class LNL_ServerSystem : SystemBase, INetEventListener, INetLogger
     {
         NetDebug.Logger = this;
         _dataWriter = new NetDataWriter();
-        _netServer = new NetManager(this);
-        _netServer.Start(5000);
-        _netServer.BroadcastReceiveEnabled = true;
-        _netServer.UpdateTime = 15;
+        _netManager = new NetManager(this);
+        _netManager.Start(5000);
+        _netManager.BroadcastReceiveEnabled = true;
+        _netManager.UpdateTime = 15;
+
+        _entitySpawner = new PlayerCharacterEntitySpawner();
     }
 
     void UpdateClient()
     {
-        _netServer.PollEvents();
+        _netManager.PollEvents();
     }
 
     void Shutdown()
     {
         NetDebug.Logger = null;
-        if (_netServer != null)
-            _netServer.Stop();
+        if (_netManager != null)
+            _netManager.Stop();
     }
 
     public void OnPeerConnected(NetPeer peer)
     {
         Debug.Log("[SERVER] We have new peer " + peer.EndPoint);
         _ourPeer = peer;
+
+        float3 pos = new float3(2f, 0, 4f);
+        _entitySpawner.SpawnPlayerCharacterEntity(pos);
     }
 
     public void OnNetworkError(IPEndPoint endPoint, SocketError socketErrorCode)
@@ -62,7 +69,7 @@ public class LNL_ServerSystem : SystemBase, INetEventListener, INetLogger
             Debug.Log("[SERVER] Received discovery request. Send discovery response");
             NetDataWriter resp = new NetDataWriter();
             resp.Put(1);
-            _netServer.SendUnconnectedMessage(resp, remoteEndPoint);
+            _netManager.SendUnconnectedMessage(resp, remoteEndPoint);
         }
     }
 
