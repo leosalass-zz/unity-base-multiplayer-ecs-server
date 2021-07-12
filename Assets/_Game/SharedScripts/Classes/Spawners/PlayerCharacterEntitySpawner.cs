@@ -29,7 +29,7 @@ public class PlayerCharacterEntitySpawner : MonoBehaviour
         playerCharacterEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(prefab, settings);
     }
 
-    public void SpawnPlayerCharacterEntity(float3 pos)
+    public void SpawnPlayerCharacterEntity(float3 pos, int peerId)
     {
         Entity entity = entityManager.Instantiate(playerCharacterEntityPrefab);
         entityManager.SetComponentData(entity, new Translation
@@ -38,6 +38,8 @@ public class PlayerCharacterEntitySpawner : MonoBehaviour
         });
         entityManager.SetName(entity, "PlayercharacterEntity");
         _entities.Add(entity);
+
+        //TODO:create a new component for this entity and add the peer id
 
     }
 
