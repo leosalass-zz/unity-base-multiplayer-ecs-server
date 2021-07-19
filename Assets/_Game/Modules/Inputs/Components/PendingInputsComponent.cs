@@ -1,7 +1,7 @@
 using Unity.Entities;
 
 [GenerateAuthoringComponent]
-public struct PendingInputs : IComponentData
+public struct PendingInputsComponent : IComponentData
 {
     public int prediction;
 }

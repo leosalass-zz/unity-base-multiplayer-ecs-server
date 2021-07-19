@@ -6,14 +6,15 @@ using LiteNetLib.Utils;
 using UnityEngine;
 using Unity.Entities;
 using Unity.Mathematics;
+using System.Collections.Generic;
 
 public class LNL_ServerSystem : SystemBase, INetEventListener, INetLogger
 {
     private NetManager _netManager;
-    private NetPeer _ourPeer;
     private NetDataWriter _dataWriter;
+    private Dictionary<int, NetPeer> _peers;
 
-    private PlayerCharacterEntitySpawner _entitySpawner;
+    private PlayerCharacterEntityManager _entitySpawner;
 
 #if UNITY_EDITOR
     protected override void OnCreate() { Init(); }
@@ -32,7 +33,8 @@ public class LNL_ServerSystem : SystemBase, INetEventListener, INetLogger
         _netManager.BroadcastReceiveEnabled = true;
         _netManager.UpdateTime = 15;
 
-        _entitySpawner = new PlayerCharacterEntitySpawner();
+        _entitySpawner = new PlayerCharacterEntityManager();
+        _peers = new Dictionary<int, NetPeer>();
     }
 
     void UpdateClient()
@@ -49,11 +51,14 @@ public class LNL_ServerSystem : SystemBase, INetEventListener, INetLogger
 
     public void OnPeerConnected(NetPeer peer)
     {
-        Debug.Log("[SERVER] We have new peer " + peer.EndPoint);
-        _ourPeer = peer;
+        _peers.Add(peer.Id, peer);
 
+        //TODO, Set spawn points
         float3 pos = new float3(2f, 0, 4f);
-        _entitySpawner.SpawnPlayerCharacterEntity(pos);
+        _entitySpawner.SpawnPlayerCharacterEntity(pos, peer.Id);
+
+        Debug.Log("[SERVER] Connected peers: " + _netManager.ConnectedPeersCount);
+        Debug.Log("[SERVER] We have new peer " + peer.EndPoint);
     }
 
     public void OnNetworkError(IPEndPoint endPoint, SocketError socketErrorCode)
@@ -85,8 +90,8 @@ public class LNL_ServerSystem : SystemBase, INetEventListener, INetLogger
     public void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo)
     {
         Debug.Log("[SERVER] peer disconnected " + peer.EndPoint + ", info: " + disconnectInfo.Reason);
-        if (peer == _ourPeer)
-            _ourPeer = null;
+        _entitySpawner.DestroyEntity(peer.Id);
+        _peers.Remove(peer.Id);
     }
 
     public void OnNetworkReceive(NetPeer peer, NetPacketReader reader, DeliveryMethod deliveryMethod)
