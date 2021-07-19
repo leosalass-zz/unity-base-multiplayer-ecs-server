@@ -4,7 +4,7 @@ using Unity.Transforms;
 using Unity.Mathematics;
 using System.Collections.Generic;
 
-public class PlayerCharacterEntitySpawner : MonoBehaviour
+public class PlayerCharacterEntityManager : MonoBehaviour
 {
     private EntityManager entityManager;
     private EntityArchetype playerCharacterArchetype;
@@ -12,11 +12,11 @@ public class PlayerCharacterEntitySpawner : MonoBehaviour
     private GameObjectConversionSettings settings;
 
     private Entity playerCharacterEntityPrefab;
-    private List<Entity> _entities;
+    private Dictionary<int, Entity> _entities;
 
-    public PlayerCharacterEntitySpawner()
+    public PlayerCharacterEntityManager()
     {
-        _entities = new List<Entity>();
+        _entities = new Dictionary<int, Entity>();
         defaultWorld = World.DefaultGameObjectInjectionWorld;
         entityManager = defaultWorld.EntityManager;
         settings = GameObjectConversionSettings.FromWorld(defaultWorld, null);
@@ -36,18 +36,25 @@ public class PlayerCharacterEntitySpawner : MonoBehaviour
         {
             Value = pos
         });
+        entityManager.SetComponentData(entity, new PlayerCharacterConnectionComponent
+        {
+
+            id = peerId
+        });
         entityManager.SetName(entity, "PlayercharacterEntity");
-        _entities.Add(entity);
-
-        //TODO:create a new component for this entity and add the peer id
-
+        _entities.Add(peerId, entity);
     }
 
-    public void DestroyAndResetAllEntities()
+    public void DestroyEntity(int peerId) {
+        entityManager.DestroyEntity(_entities[peerId]);
+        _entities.Remove(peerId);
+    }
+
+    public void DestroyAllEntities()
     {
-        foreach (Entity entity in _entities)
+        foreach (KeyValuePair<int, Entity> entity in _entities)
         {
-            entityManager.DestroyEntity(entity);
+            entityManager.DestroyEntity(entity.Value);
         }
 
         _entities.Clear();

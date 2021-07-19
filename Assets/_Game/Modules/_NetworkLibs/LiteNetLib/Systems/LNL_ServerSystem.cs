@@ -14,7 +14,7 @@ public class LNL_ServerSystem : SystemBase, INetEventListener, INetLogger
     private NetDataWriter _dataWriter;
     private Dictionary<int, NetPeer> _peers;
 
-    private PlayerCharacterEntitySpawner _entitySpawner;
+    private PlayerCharacterEntityManager _entitySpawner;
 
 #if UNITY_EDITOR
     protected override void OnCreate() { Init(); }
@@ -33,7 +33,7 @@ public class LNL_ServerSystem : SystemBase, INetEventListener, INetLogger
         _netManager.BroadcastReceiveEnabled = true;
         _netManager.UpdateTime = 15;
 
-        _entitySpawner = new PlayerCharacterEntitySpawner();
+        _entitySpawner = new PlayerCharacterEntityManager();
         _peers = new Dictionary<int, NetPeer>();
     }
 
@@ -90,6 +90,7 @@ public class LNL_ServerSystem : SystemBase, INetEventListener, INetLogger
     public void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo)
     {
         Debug.Log("[SERVER] peer disconnected " + peer.EndPoint + ", info: " + disconnectInfo.Reason);
+        _entitySpawner.DestroyEntity(peer.Id);
         _peers.Remove(peer.Id);
     }
 

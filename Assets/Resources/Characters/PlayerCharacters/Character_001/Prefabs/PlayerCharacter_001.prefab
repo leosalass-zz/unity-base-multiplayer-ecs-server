@@ -15,9 +15,10 @@ GameObject:
   - component: {fileID: 5103922211386105499}
   - component: {fileID: 5103922211386105498}
   - component: {fileID: 5103922211386105497}
+  - component: {fileID: 6198109478239342878}
   m_Layer: 0
   m_Name: PlayerCharacter_001
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -55,7 +56,6 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 73c176f402d2c2f4d929aa5da7585d17, type: 2}
+  - {fileID: 2100000, guid: f946bf80a3a6d7a4ab1c39ba59eac7c7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -137,4 +137,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prediction: 0
-  validation: 0
+--- !u!114 &6198109478239342878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5103922211386105569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 311d57cafe4739443b700db23ceabb84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 0
