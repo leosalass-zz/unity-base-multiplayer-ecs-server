@@ -110,11 +110,10 @@ public class LNL_ServerSystem : SystemBase, INetEventListener, INetLogger
     }
     #endregion
 
-    #region Network Messages
+    #region Incoming Network Messages
     private void NetworkMessagesHandler(NetPeer peer, NetPacketReader reader, DeliveryMethod deliveryMethod)
     {
         MessageCode code = (MessageCode)reader.GetInt();
-
 
         switch (code)
         {
