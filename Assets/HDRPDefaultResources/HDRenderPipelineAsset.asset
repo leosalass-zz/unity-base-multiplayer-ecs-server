@@ -149,11 +149,11 @@ MonoBehaviour:
       enableBigTilePrepass: 0
       isFptlEnabled: 0
   m_RenderPipelineResources: {fileID: 11400000, guid: 3ce144cff5783da45aa5d4fdc2da14b7, type: 2}
-  m_RenderPipelineRayTracingResources: {fileID: 0}
-  m_DefaultVolumeProfile: {fileID: 11400000, guid: 33f00c3c812f011448341f4343483156, type: 2}
+  m_RenderPipelineRayTracingResources: {fileID: 11400000, guid: ba6e7f30e5cffc249a8bf7ee5756c196, type: 2}
+  m_DefaultVolumeProfile: {fileID: 11400000, guid: 9fe871e82af8e474cbcbd2ad65a9e099, type: 2}
   m_LensAttenuation: 0
   m_UseRenderGraph: 1
-  m_DefaultLookDevProfile: {fileID: 11400000, guid: fcf022b3d3ef5354bbe534784609c184, type: 2}
+  m_DefaultLookDevProfile: {fileID: 11400000, guid: 14c2a6602e1374047af4f99a42d132c3, type: 2}
   m_RenderingPathDefaultCameraFrameSettings:
     bitDatas:
       data1: 72198262773251917
@@ -246,7 +246,7 @@ MonoBehaviour:
     supportDitheringCrossFade: 1
     supportTerrainHole: 0
     supportProbeVolume: 0
-    supportRayTracing: 0
+    supportRayTracing: 1
     supportedRayTracingMode: 3
     probeVolumeSettings:
       atlasResolution: 128
@@ -440,8 +440,8 @@ MonoBehaviour:
   m_DefaultMaterialQualityLevel: 4
   diffusionProfileSettings: {fileID: 0}
   diffusionProfileSettingsList:
-  - {fileID: 11400000, guid: e8e09264aae80b54eae8142db998e7a3, type: 2}
-  - {fileID: 11400000, guid: 2be1dbc31af6ecd4b8b74d99950d1b3e, type: 2}
+  - {fileID: 11400000, guid: 3565d149ac5a4154282c27f948365808, type: 2}
+  - {fileID: 11400000, guid: 943ab996e3752c54cb6caf1ccadc529f, type: 2}
   beforeTransparentCustomPostProcesses: []
   beforeTAACustomPostProcesses: []
   beforePostProcessCustomPostProcesses: []

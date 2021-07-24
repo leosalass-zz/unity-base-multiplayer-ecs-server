@@ -11,7 +11,7 @@ using System.Collections.Generic;
 public class LNL_ServerSystem : SystemBase, INetEventListener, INetLogger
 {
     private NetManager _netManager;
-    private NetDataWriter _dataWriter;
+    private NetDataWriter _writer;
     private Dictionary<int, NetPeer> _peers;
 
     private PlayerCharacterEntityManager _entitySpawner;
@@ -27,7 +27,7 @@ public class LNL_ServerSystem : SystemBase, INetEventListener, INetLogger
     void Init()
     {
         NetDebug.Logger = this;
-        _dataWriter = new NetDataWriter();
+        _writer = new NetDataWriter();
         _netManager = new NetManager(this);
         _netManager.Start(5000);
         _netManager.BroadcastReceiveEnabled = true;
@@ -54,11 +54,25 @@ public class LNL_ServerSystem : SystemBase, INetEventListener, INetLogger
         _peers.Add(peer.Id, peer);
 
         //TODO, Set spawn points
-        float3 pos = new float3(2f, 0, 4f);
+        float3 pos = new float3(-3f, 5, 0f);
         _entitySpawner.SpawnPlayerCharacterEntity(pos, peer.Id);
+
+        PlayerCharacterEntityMessage playerCharacterEntityMessage = new PlayerCharacterEntityMessage(pos);
+        createNetworkPlayerCharacterEntity(peer, playerCharacterEntityMessage);
 
         Debug.Log("[SERVER] Connected peers: " + _netManager.ConnectedPeersCount);
         Debug.Log("[SERVER] We have new peer " + peer.EndPoint);
+    }
+
+    private void createNetworkPlayerCharacterEntity(NetPeer peer, PlayerCharacterEntityMessage playerCharacterEntityMessage)
+    {
+        _writer.Reset();
+        _writer.Put((int)playerCharacterEntityMessage.Code);
+        _writer.Put(playerCharacterEntityMessage.Position.x);
+        _writer.Put(playerCharacterEntityMessage.Position.y);
+        _writer.Put(playerCharacterEntityMessage.Position.z);
+
+        peer.Send(_writer, DeliveryMethod.ReliableOrdered);
     }
 
     public void OnNetworkError(IPEndPoint endPoint, SocketError socketErrorCode)
