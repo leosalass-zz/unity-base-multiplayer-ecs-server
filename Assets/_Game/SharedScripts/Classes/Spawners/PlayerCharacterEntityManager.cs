@@ -4,7 +4,7 @@ using Unity.Transforms;
 using Unity.Mathematics;
 using System.Collections.Generic;
 
-public class PlayerCharacterEntityManager : MonoBehaviour
+public class PlayerCharacterEntityManager
 {
     private EntityManager entityManager;
     private EntityArchetype playerCharacterArchetype;
@@ -41,11 +41,12 @@ public class PlayerCharacterEntityManager : MonoBehaviour
 
             id = peerId
         });
-        entityManager.SetName(entity, "PlayercharacterEntity");
+        entityManager.SetName(entity, "PlayercharacterEntity" + peerId);
         _entities.Add(peerId, entity);
     }
 
-    public void DestroyEntity(int peerId) {
+    public void DestroyEntity(int peerId)
+    {
         entityManager.DestroyEntity(_entities[peerId]);
         _entities.Remove(peerId);
     }
