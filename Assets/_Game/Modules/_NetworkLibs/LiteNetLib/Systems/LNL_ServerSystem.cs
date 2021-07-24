@@ -16,7 +16,7 @@ public class LNL_ServerSystem : SystemBase, INetEventListener, INetLogger
 
     private PlayerCharacterEntityManager _entitySpawner;
 
-    #region Systen Methods
+    #region System Methods
 #if UNITY_EDITOR
     protected override void OnCreate() { Init(); }
 
@@ -26,7 +26,7 @@ public class LNL_ServerSystem : SystemBase, INetEventListener, INetLogger
 #endif
     #endregion
 
-    #region System Methods Reanmed
+    #region System Methods Renamed
     void Init()
     {
         NetDebug.Logger = this;
